@@ -125,5 +125,5 @@ log_execution('Success', 'Pipeline executed successfully')
 SELECT * FROM telecom_data LIMIT 10;
 ```
 ## Scripts Utilizados
-glue_etl_script.py: Script de Glue para transformar y cargar datos.
-dynamodb_logger.py: Script para registrar logs en DynamoDB.
+- glue_etl_script.py: Script de Glue para transformar y cargar datos.
+- dynamodb_logger.py: Script para registrar logs en DynamoDB.
