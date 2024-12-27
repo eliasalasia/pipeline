@@ -17,9 +17,9 @@ Paso 2: Subir Datos a S3
 bash
 Copy code
 aws s3 cp example_data.csv s3://telecom-datalake/data/
-Contenido de data.csv:
+Ejemplo del archivo data.csv:
 
-csv
+css
 Copy code
 id_cliente,nombre_cliente,servicio,fecha_contrato,estado_contrato,monto
 1,Juan Perez,Internet,2024-01-01,Activo,50
@@ -27,6 +27,8 @@ id_cliente,nombre_cliente,servicio,fecha_contrato,estado_contrato,monto
 3,Carlos Gomez,Internet,2024-03-10,Cancelado,50
 4,María Díaz,Telefonía,2024-04-05,Activo,30
 Paso 3: Catalogación con AWS Glue
+Crear un Crawler en AWS Glue:
+
 Navega a la consola de AWS Glue.
 Configura un nuevo crawler llamado telecom-data-crawler con los siguientes detalles:
 Fuente de Datos: El bucket telecom-datalake.
@@ -34,7 +36,10 @@ Rol de IAM: Crea uno con permisos para Glue y S3.
 Destino: Glue Data Catalog.
 Ejecuta el crawler para catalogar los datos almacenados en S3.
 Paso 4: Crear y Ejecutar un Trabajo de Glue
-Crea el script ETL en un archivo llamado glue_etl_script.py con el siguiente contenido:
+ETL con AWS Glue:
+
+Crear el Script ETL: Crea un archivo glue_etl_script.py con el siguiente contenido:
+
 python
 Copy code
 import sys
@@ -43,7 +48,7 @@ from awsglue.utils import getResolvedOptions
 from pyspark.context import SparkContext
 from awsglue.context import GlueContext
 from awsglue.job import Job
-from pyspark.sql.functions import col
+from pyspark.sql.functions import *
 
 # @params: [JOB_NAME]
 args = getResolvedOptions(sys.argv, ['JOB_NAME'])
@@ -65,15 +70,17 @@ transformed = df.dropDuplicates() \
 transformed.write.csv('s3a://telecom-datalake/transformed_data.csv', header=True)
 
 job.commit()
-Sube el script a S3:
+Subir el Script a S3:
+
 bash
 Copy code
 aws s3 cp glue_etl_script.py s3://telecom-datalake/scripts/
 Paso 5: Configurar Amazon Redshift
-Configura Redshift Serverless:
+Configurar Redshift Serverless:
+
 Ve a la consola de Amazon Redshift.
 Configura un namespace llamado telecom-namespace y un workgroup telecom-workgroup.
-Crea una base de datos y una tabla de destino:
+Crea una base de datos y una tabla de destino ejecutando el siguiente comando:
 sql
 Copy code
 CREATE TABLE telecom_data (
@@ -84,8 +91,13 @@ CREATE TABLE telecom_data (
     fecha DATE
 );
 Paso 6: Configurar Amazon DynamoDB
-Crea la tabla telecom_pipeline_logs en DynamoDB con la clave primaria execution_id (tipo String).
-Crea un archivo llamado dynamodb_logger.py con el siguiente contenido:
+Crear la tabla telecom_pipeline_logs:
+
+Ve a la consola de Amazon DynamoDB.
+Crea una tabla llamada telecom_pipeline_logs con la clave primaria execution_id (tipo String).
+Script para Registrar Logs:
+Crea un archivo dynamodb_logger.py con el siguiente contenido:
+
 python
 Copy code
 import boto3
@@ -107,9 +119,11 @@ def log_execution(status, message):
 # Ejemplo de cómo llamar a la función para registrar un log
 log_execution('Success', 'Pipeline executed successfully')
 Paso 7: Ejecutar Consultas en Athena
+Configurar y Ejecutar Consultas en Athena:
+
 Ve a la consola de Amazon Athena.
 Configura el bucket telecom-datalake como fuente de datos.
-Ejecuta la siguiente consulta para analizar los datos:
+Crea consultas para analizar los datos. Por ejemplo:
 sql
 Copy code
 SELECT * FROM telecom_data LIMIT 10;
