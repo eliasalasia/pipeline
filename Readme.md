@@ -29,16 +29,16 @@ id_cliente,nombre_cliente,servicio,fecha_contrato,estado_contrato,monto
 
 ### Paso 3: Catalogación con AWS Glue
 Crear un Crawler en AWS Glue:
-Navega a la consola de AWS Glue.
-Configura un nuevo crawler llamado telecom-data-crawler con los siguientes detalles:
-Fuente de Datos: El bucket telecom-datalake.
-Rol de IAM: Crea uno con permisos para Glue y S3.
-Destino: Glue Data Catalog.
-Ejecuta el crawler para catalogar los datos almacenados en S3.
+- Navega a la consola de AWS Glue.
+- Configura un nuevo crawler llamado telecom-data-crawler con los siguientes detalles:
+- Fuente de Datos: El bucket telecom-datalake.
+- Rol de IAM: Crea uno con permisos para Glue y S3.
+- Destino: Glue Data Catalog.
+- Ejecuta el crawler para catalogar los datos almacenados en S3.
 
 ### Paso 4: Crear y Ejecutar un Trabajo de Glue
 ETL con AWS Glue:
-Crear el Script ETL: Crea un archivo glue_etl_script.py con el siguiente contenido:
+- Crear el Script ETL: Crea un archivo glue_etl_script.py con el siguiente contenido:
 ``` Python 
 import sys
 from awsglue.transforms import *
@@ -74,10 +74,10 @@ Subir el Script a S3:
 aws s3 cp glue_etl_script.py s3://telecom-datalake/scripts/
 ```
 ### Paso 5: Configurar Amazon Redshift
-Configurar Redshift Serverless:
-Ve a la consola de Amazon Redshift.
-Configura un namespace llamado telecom-namespace y un workgroup telecom-workgroup.
-Crea una base de datos y una tabla de destino ejecutando el siguiente comando:
+- Configurar Redshift Serverless:
+- Ve a la consola de Amazon Redshift.
+- Configura un namespace llamado telecom-namespace y un workgroup telecom-workgroup.
+- Crea una base de datos y una tabla de destino ejecutando el siguiente comando:
 ```sql
 
 CREATE TABLE telecom_data (
@@ -89,11 +89,11 @@ CREATE TABLE telecom_data (
 );
 ```
 ### Paso 6: Configurar Amazon DynamoDB
-Crear la tabla telecom_pipeline_logs:
-Ve a la consola de Amazon DynamoDB.
-Crea una tabla llamada telecom_pipeline_logs con la clave primaria execution_id (tipo String).
-Script para Registrar Logs:
-Crea un archivo dynamodb_logger.py con el siguiente contenido:
+- Crear la tabla telecom_pipeline_logs:
+- Ve a la consola de Amazon DynamoDB.
+- Crea una tabla llamada telecom_pipeline_logs con la clave primaria execution_id (tipo String).
+- Script para Registrar Logs:
+- Crea un archivo dynamodb_logger.py con el siguiente contenido:
 ```
 
 import boto3
@@ -117,9 +117,9 @@ log_execution('Success', 'Pipeline executed successfully')
 
 ### Paso 7: Ejecutar Consultas en Athena
 ## Configurar y Ejecutar Consultas en Athena:
-Ve a la consola de Amazon Athena.
-Configura el bucket telecom-datalake como fuente de datos.
-Crea consultas para analizar los datos. Por ejemplo:
+- Ve a la consola de Amazon Athena.
+- Configura el bucket telecom-datalake como fuente de datos.
+- Crea consultas para analizar los datos. Por ejemplo:
 ``` sql
 
 SELECT * FROM telecom_data LIMIT 10;
