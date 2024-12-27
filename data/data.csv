@@ -1,0 +1,5 @@
+id_cliente,nombre_cliente,servicio,fecha_contrato,estado_contrato,monto
+1,Juan Perez,Internet,2024-01-01,Activo,50
+2,Ana Lopez,Telefonía,2024-02-15,Activo,40
+3,Carlos Gomez,Internet,2024-03-10,Cancelado,50
+4,María Díaz,Telefonía,2024-04-05,Activo,30
