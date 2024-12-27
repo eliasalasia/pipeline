@@ -10,14 +10,14 @@ Amazon Athena: Consultas ad-hoc directamente sobre los datos en S3.
 Amazon DynamoDB: Registro de configuraciones y logs del pipeline.
 # Configuración del Proyecto
 ### Paso 1: Crear un Bucket S3
-```bash
+
 aws s3 mb s3://telecom-datalake
 
 ### Paso 2: Subir Datos a S3
-```bash
+
 aws s3 cp example_data.csv s3://telecom-datalake/data/
 Ejemplo del archivo data.csv:
-```bash
+
 css
 id_cliente,nombre_cliente,servicio,fecha_contrato,estado_contrato,monto
 1,Juan Perez,Internet,2024-01-01,Activo,50
@@ -37,7 +37,7 @@ Ejecuta el crawler para catalogar los datos almacenados en S3.
 ### Paso 4: Crear y Ejecutar un Trabajo de Glue
 ETL con AWS Glue:
 Crear el Script ETL: Crea un archivo glue_etl_script.py con el siguiente contenido:
-```bash
+
 import sys
 from awsglue.transforms import *
 from awsglue.utils import getResolvedOptions
@@ -68,7 +68,7 @@ transformed.write.csv('s3a://telecom-datalake/transformed_data.csv', header=True
 job.commit()
 Subir el Script a S3:
 
-```bash
+
 aws s3 cp glue_etl_script.py s3://telecom-datalake/scripts/
 
 ### Paso 5: Configurar Amazon Redshift
@@ -77,7 +77,7 @@ Ve a la consola de Amazon Redshift.
 Configura un namespace llamado telecom-namespace y un workgroup telecom-workgroup.
 Crea una base de datos y una tabla de destino ejecutando el siguiente comando:
 sql
-```bash
+
 CREATE TABLE telecom_data (
     id_llamada INT,
     numero_origen VARCHAR(20),
@@ -92,7 +92,7 @@ Crea una tabla llamada telecom_pipeline_logs con la clave primaria execution_id 
 Script para Registrar Logs:
 Crea un archivo dynamodb_logger.py con el siguiente contenido:
 
-```bash
+
 import boto3
 from datetime import datetime
 
