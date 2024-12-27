@@ -10,20 +10,22 @@ Amazon Athena: Consultas ad-hoc directamente sobre los datos en S3.
 Amazon DynamoDB: Registro de configuraciones y logs del pipeline.
 # Configuración del Proyecto
 ### Paso 1: Crear un Bucket S3
-
+``` bas
 aws s3 mb s3://telecom-datalake
-
+```
 ### Paso 2: Subir Datos a S3
-
+```
 aws s3 cp example_data.csv s3://telecom-datalake/data/
+```
 Ejemplo del archivo data.csv:
 
-css
+``` css
 id_cliente,nombre_cliente,servicio,fecha_contrato,estado_contrato,monto
 1,Juan Perez,Internet,2024-01-01,Activo,50
 2,Ana Lopez,Telefonía,2024-02-15,Activo,40
 3,Carlos Gomez,Internet,2024-03-10,Cancelado,50
-4,María Díaz,Telefonía,2024-04-05,Activo,30
+4,María Díaz,Telefonía,2024-04-05,Activo,30 
+```
 
 ### Paso 3: Catalogación con AWS Glue
 Crear un Crawler en AWS Glue:
@@ -37,7 +39,7 @@ Ejecuta el crawler para catalogar los datos almacenados en S3.
 ### Paso 4: Crear y Ejecutar un Trabajo de Glue
 ETL con AWS Glue:
 Crear el Script ETL: Crea un archivo glue_etl_script.py con el siguiente contenido:
-
+``` Python 
 import sys
 from awsglue.transforms import *
 from awsglue.utils import getResolvedOptions
@@ -70,13 +72,13 @@ Subir el Script a S3:
 
 
 aws s3 cp glue_etl_script.py s3://telecom-datalake/scripts/
-
+```
 ### Paso 5: Configurar Amazon Redshift
 Configurar Redshift Serverless:
 Ve a la consola de Amazon Redshift.
 Configura un namespace llamado telecom-namespace y un workgroup telecom-workgroup.
 Crea una base de datos y una tabla de destino ejecutando el siguiente comando:
-sql
+```sql
 
 CREATE TABLE telecom_data (
     id_llamada INT,
@@ -85,13 +87,14 @@ CREATE TABLE telecom_data (
     duracion DOUBLE,
     fecha DATE
 );
+```
 ### Paso 6: Configurar Amazon DynamoDB
 Crear la tabla telecom_pipeline_logs:
 Ve a la consola de Amazon DynamoDB.
 Crea una tabla llamada telecom_pipeline_logs con la clave primaria execution_id (tipo String).
 Script para Registrar Logs:
 Crea un archivo dynamodb_logger.py con el siguiente contenido:
-
+```
 
 import boto3
 from datetime import datetime
@@ -108,7 +111,7 @@ def log_execution(status, message):
             'timestamp': datetime.now().isoformat()
         }
     )
-
+```
 ## Ejemplo de cómo llamar a la función para registrar un log
 log_execution('Success', 'Pipeline executed successfully')
 
@@ -117,10 +120,10 @@ log_execution('Success', 'Pipeline executed successfully')
 Ve a la consola de Amazon Athena.
 Configura el bucket telecom-datalake como fuente de datos.
 Crea consultas para analizar los datos. Por ejemplo:
-sql
+``` sql
 
 SELECT * FROM telecom_data LIMIT 10;
-
+```
 ## Scripts Utilizados
 glue_etl_script.py: Script de Glue para transformar y cargar datos.
 dynamodb_logger.py: Script para registrar logs en DynamoDB.
