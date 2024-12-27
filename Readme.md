@@ -3,11 +3,11 @@
 Este proyecto simula el procesamiento de datos de telecomunicaciones para una empresa del sector. Los datos se almacenan en un Data Lake (Amazon S3), se transforman con AWS Glue, se cargan en un Data Warehouse (Amazon Redshift) para su análisis, y se realizan consultas ad-hoc usando Amazon Athena. Los logs de ejecución del pipeline se registran en Amazon DynamoDB.
 
 ## Servicios Utilizados
-Amazon S3: Almacenamiento de datos en formato CSV/JSON.
-AWS Glue: Proceso ETL (Extract, Transform, Load) para transformar y cargar datos.
-Amazon Redshift: Data Warehouse para el análisis de datos transformados.
-Amazon Athena: Consultas ad-hoc directamente sobre los datos en S3.
-Amazon DynamoDB: Registro de configuraciones y logs del pipeline.
+- Amazon S3: Almacenamiento de datos en formato CSV/JSON.
+- AWS Glue: Proceso ETL (Extract, Transform, Load) para transformar y cargar datos.
+- Amazon Redshift: Data Warehouse para el análisis de datos transformados.
+- Amazon Athena: Consultas ad-hoc directamente sobre los datos en S3.
+- Amazon DynamoDB: Registro de configuraciones y logs del pipeline.
 # Configuración del Proyecto
 ### Paso 1: Crear un Bucket S3
 ``` bas
