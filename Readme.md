@@ -118,7 +118,7 @@ Ve a la consola de Amazon Athena.
 Configura el bucket telecom-datalake como fuente de datos.
 Crea consultas para analizar los datos. Por ejemplo:
 sql
-```bash
+
 SELECT * FROM telecom_data LIMIT 10;
 
 ## Scripts Utilizados
